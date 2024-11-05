@@ -1,0 +1,126 @@
+workspace:
+  aws:
+    account_id: 654654531100
+    role: ""
+    region: "us-east-1"
+    profile: ""
+  common:
+    environment: "dev"
+    region_code : "ue1"
+    tags:
+      "Module": "EC2/ASG"
+
+
+  asg:
+    block_device_name: "/dev/xvda"
+    block_volume_type: "gp3"
+    disable_api_termination: "false"
+    instance_initiated_shutdown_behavior: "terminate"
+    tag_instance_resource_type: "instance"
+    tag_volume_resource_type: "volume"
+    ebs_optimized: "false"
+    aws_launch_template_version: "$Latest"
+    default_cooldown: "300"
+    health_check_grace_period: "300"
+    health_check_type: "EC2"
+    capacity_rebalance: "true"
+    lifecycle_hook_heartbeat_timeout: "300"
+    image_id: "ami-03db9b2aac6af477d"
+    throughput: 125
+    iops: 3000
+    create_autoscaling_policy: false
+    lt_block_volume_size: "50"
+    lt_cpu_credits: "standard"
+    lt_monitoring_enabled: "false"
+    asg_desired_capacity: "0"
+    asg_min_capacity: "0"
+    asg_max_capacity: "1"
+    on_demand_min_instances: "0"
+    on_demand_percentage_capacity: "0"
+    config_bucket_name: "non-prod-generic-config"
+    lt_log_bucket_name: "non-prod-generic-logs"
+    lt_final_log_path: "/opt/logs/"
+    scale_in_threshold: "65"
+    scale_out_threshold: "75"
+    scaling_in_adjustment: "-1"
+    scaling_in_cooldown: "300"
+    scaling_out_adjustment: "2"
+    scaling_out_cooldown: "300"
+    scale_out_evaluation_periods: "1"
+    scale_in_evaluation_periods: "5"
+    scale_in_period: "300"
+    scale_out_period: "60"
+    spot_allocation_strategy: "capacity-optimized"
+    spot_instance_pools: "0"
+    user_data_script: "launch-temp-nonprod.tpl"
+    desired_capacity_type : "units"
+
+    instances_type:
+      - "t3a.medium"
+      - "t3a.small"
+
+    instance_key_name: "autoscalling-key"
+    
+    autoscaling_policy:
+      - autoscaling_policy_name : "high-cpu-reservation-scale-up"
+        scaling_adjustment: 1
+        adjustment_type: "ChangeInCapacity"
+        cooldown: 300
+
+      - autoscaling_policy_name : "low-cpu-reservation-scale-down"
+        scaling_adjustment: -1
+        adjustment_type: "ChangeInCapacity"
+        cooldown: 300
+
+      - autoscaling_policy_name : "high-mem-reservation-scale-up"
+        scaling_adjustment: 1
+        adjustment_type: "ChangeInCapacity"
+        cooldown: 300
+
+      - autoscaling_policy_name : "low-mem-reservation-scale-down"
+        scaling_adjustment: -1
+        adjustment_type: "ChangeInCapacity"
+        cooldown: 300        
+        
+
+    cloudwatch_metric_alarm: 
+      - alarm_name: "high-cpu-reservation-scale-up"
+        comparison_operator: "GreaterThanOrEqualToThreshold"
+        evaluation_periods: "1"
+        metric_name: "CPUReservation"
+        namespace: "AWS/ECS"
+        period: "300"
+        statistic: "Average"
+        threshold: "70"
+        alarm_description:  "This metric monitor EC2 instance CPU utilization"
+
+      - alarm_name: "low-cpu-reservation-scale-down"
+        comparison_operator: "LessThanOrEqualToThreshold"
+        evaluation_periods: "1"
+        metric_name: "CPUReservation"
+        namespace: "AWS/ECS"
+        period: "300"
+        statistic: "Average"
+        threshold: "50"
+        alarm_description:  "This metric monitor EC2 instance CPU utilization"
+
+      - alarm_name: "high-mem-reservation-scale-up"
+        comparison_operator: "GreaterThanOrEqualToThreshold"
+        evaluation_periods: "1"
+        metric_name: "MemoryReservation"
+        namespace: "AWS/ECS"
+        period: "300"
+        statistic: "Average"
+        threshold: "70"
+        alarm_description:  "This metric monitor EC2 instance MemoryReservation"
+
+      - alarm_name: "low-mem-reservation-scale-down"
+        comparison_operator: "LessThanOrEqualToThreshold"
+        evaluation_periods: "1"
+        metric_name: "MemoryReservation"
+        namespace: "AWS/ECS"
+        period: "300"
+        statistic: "Average"
+        threshold: "50"
+        alarm_description:  "This metric monitor EC2 instance MemoryReservation"                
+

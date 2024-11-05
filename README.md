@@ -123,4 +123,6 @@ Once the environment variable was added to the Dockerfile, I redeployed the appl
 
 This project successfully demonstrated how to deploy a containerized web application using Node.js, Golang, AWS ECS, and Docker, with infrastructure managed by Terraform. The use of modern DevOps practices allowed for an automated, scalable, and reliable deployment pipeline, and there are numerous opportunities for future improvements, including enhanced scalability, security, and monitoring.
 
+Application is live on this url: http://quest-dev-ue1-public-alb-873129906.us-east-1.elb.amazonaws.com/
+
 --- 

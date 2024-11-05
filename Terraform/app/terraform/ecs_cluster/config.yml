@@ -1,0 +1,6 @@
+common:
+  project_name_prefix: "quest"
+  project: "rearc"
+  tags:
+    "feature": "app-services"
+    "project": "cln"

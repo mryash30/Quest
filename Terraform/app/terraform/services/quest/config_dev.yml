@@ -1,0 +1,64 @@
+workspace:
+  aws:
+    account_id: 275595855473
+    role: ""
+    region: "us-east-1"
+    profile: ""
+  common:
+    environment: "dev"
+    region_code : "ue1"
+    tags:
+      "Module": "ECS/SERVICE"
+  iam:
+    path: "/"
+    
+  service:
+    name: "quest"
+    td_max_cpu: "256"
+    td_max_memory: "1000"
+    exposed_ecs_container_cpu: "0"
+    exposed_ecs_container_memory: "1000"
+    enable_execute_command: true
+    enable_circuit_breaker: false
+    rollback_ecs: false
+    nginx_td_host_log: "nginx-logs"
+    nginx_td_host_log_mount_path: "/var/log/nginx"
+    tmp: "/tmp"
+    td_host_log: "app-logs"
+    td_host_log_mount_path: "/var/log/java"
+    target_group_deregistration_delay: "60"
+    target_group_slow_start: "30"
+    target_group_port: "80"
+    target_group_protocol: "HTTP"
+    target_group_type: "instance"
+    target_group_health_check_path: "/health"
+    deployment_minimum_healthy_percent: "100"
+    deployment_maximum_percent: "200"
+    health_check_grace_period_seconds: "60"
+    exposed_ecs_container_port: "3000"
+    ecs_task_max_count: "1"
+    ecs_task_min_count: "1"
+    ecs_task_desired_count: "1"
+    enable_service_scalling: "false"
+    scale_target_max_capacity: 0
+    scale_target_min_capacity: 0   
+    disable_scale_in: "false" 
+    enable_placement_constraints: "false"
+    placement_constraints:
+      - type: "memberOf"
+        expression: "attribute:ecs.instance-type in ['t3a.small', 't3a.medium']"
+  listener_rule:
+    - priority: 2
+      tags:
+      action:
+        - type: "forward"
+      condition:
+        - type: "forward"
+          is_path_pattern: true
+          is_host_header: false
+          host_header_values:
+            - "" 
+  parameter:
+    ENV:
+      name: "/reacr/dev/quest/ENV"
+      value: "dev"

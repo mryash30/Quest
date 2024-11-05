@@ -1,0 +1,14 @@
+workspace:
+  aws:
+    account_id: 654654531100
+    role: ""
+    region: "us-east-1"
+    profile: "yash"
+  common:
+    environment: "dev"
+    region_code : "ue1"
+    tags:
+      "Module": "ECS/CLUSTER"
+
+  cluster:
+    enable_container_insights: "disabled"

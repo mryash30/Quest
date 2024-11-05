@@ -1,0 +1,5 @@
+common:
+  project_name_prefix: "quest"
+  project: "rearc"
+  tags:
+    "feature": "shared-services"
